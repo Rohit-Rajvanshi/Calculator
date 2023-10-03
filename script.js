@@ -1,6 +1,7 @@
 let firstOperand="";
 let secondOperand="";
 let currentOperator=null;
+let value=0;
 
 
 
@@ -12,8 +13,10 @@ const resetButton=document.querySelector(".reset");
 const delButton=document.querySelector(".delete");
 const currentOperation=document.querySelector(".current");
 const previousOperation=document.querySelector(".previous");
+const decimal=document.querySelector(".decimal")
 
 
+decimal.addEventListener("click",()=>appendNumber(decimal.textContent))
 
 numbers.forEach((number)=>{
     number.addEventListener("click",()=>appendNumber(number.textContent))
@@ -21,9 +24,7 @@ numbers.forEach((number)=>{
 
 operators.forEach((operator)=>{
     operator.addEventListener("click",()=>appendOperator(operator.textContent))
-    operator.addEventListener("click",()=>{
-        seriesOperation(operator.textContent);
-    })
+    
 })
 
 equalTo.addEventListener("click",()=>{
@@ -31,13 +32,11 @@ equalTo.addEventListener("click",()=>{
 })
 
 function appendNumber(number){
-    
-    currentOperation.textContent +=number;
+    if(number==="." && currentOperation.textContent.includes(".")) return;
+    currentOperation.textContent+=number;
     if(currentOperation.textContent.length>=19){
-    currentOperation.textContent="Max Limit:19 Digits"
-
-    }
-}
+    currentOperation.textContent="Max Limit:19 Digits"}
+ }
 
 delButton.addEventListener("click",()=>{
     del()
@@ -49,10 +48,14 @@ resetButton.addEventListener("click",()=>{
 
 function appendOperator(operator){
     if (currentOperation.textContent === "") return;
+    if(previousOperation.textContent!=="" && !previousOperation.textContent.includes("=")){
+        compute(operator)
+    }
+    else{previousOperation.textContent===""
     currentOperator=operator
     firstOperand=currentOperation.textContent;
     previousOperation.textContent=`${currentOperation.textContent} ${currentOperator}`
-    currentOperation.textContent=" "
+    currentOperation.textContent=""}
 }
 function evaluate(){
     if(!previousOperation.textContent.trim()){
@@ -61,7 +64,9 @@ function evaluate(){
     }
     
     secondOperand=currentOperation.textContent
+    
     previousOperation.textContent=`${firstOperand} ${currentOperator} ${secondOperand} ${"="}`
+    
     
     switch(currentOperator){
        case"+":
@@ -74,15 +79,17 @@ function evaluate(){
        currentOperation.textContent=Number(firstOperand)*Number(secondOperand);
        break;
        case"/":
-       if(secondOperand=="0"){
-        currentOperation.textContent="You cannot divide a number by 0"
-        return;
-    }
+       if(currentOperation.textContent==="0"){
+        currentOperation.textContent="division by 0 = impossible"
+        }
         else{
         currentOperation.textContent=Number(firstOperand)/Number(secondOperand);}
        break;
     }
-    
+
+    if(currentOperation.textContent.includes(".")){
+      currentOperation.textContent=Number(currentOperation.textContent).toFixed(2)
+    }
 }
 
 function del(){
@@ -95,7 +102,91 @@ function reset(){
     currentOperation.textContent=""
     previousOperation.textContent=""
     currentOperator=null
+    firstOperand=""
+    secondOperand=""
+    
 }
 
+function compute(op){
+    firstOperand;
+    currentOperator;
+    secondOperand=currentOperation.textContent
+    switch(currentOperator){
+        case"+":
+         value=Number(firstOperand)+Number(secondOperand);
+        break;
+        case"-":
+         value=Number(firstOperand)-Number(secondOperand);
+        break;
+        case"*":
+        value=Number(firstOperand)*Number(secondOperand);
+        break;
+        case"/":
+        if(currentOperation.textContent==="0"){
+         currentOperation.textContent="division by 0 = impossible"
+         }
+         else{
+         value=Number(firstOperand)/Number(secondOperand);}
+        break;
+     }
+     newValue=value.toString()
+     previousOperation.textContent=`${newValue} ${op}`
+     currentOperation.textContent=""
+     currentOperator=op
+     firstOperand=newValue
+     
+}
 
-  
+document.addEventListener("keydown", function(event) {
+    if (event.key === "1") {
+        appendNumber("1"); 
+    }
+    else if (event.key === "2") {
+        appendNumber("2"); 
+    }
+    else if (event.key === "3") {
+        appendNumber("3"); 
+    }
+    else if (event.key === "4") {
+        appendNumber("4"); 
+    }
+    else if (event.key === "5") {
+        appendNumber("5"); 
+    }
+    else if (event.key === "6") {
+        appendNumber("6"); 
+    }
+    else if (event.key === "7") {
+        appendNumber("7"); 
+    }
+    else if (event.key === "8") {
+        appendNumber("8"); 
+    }
+    else if (event.key === "9") {
+        appendNumber("9"); 
+    }
+    else if (event.key === "0") {
+        appendNumber("0"); 
+    }
+    else if (event.key === "+") {
+        appendOperator("+"); 
+    }
+    else if (event.key === "-") {
+        appendOperator("-"); 
+    }
+    else if (event.key === "*") {
+        appendOperator("*"); 
+    }
+    else if (event.key === "/") {
+        appendOperator("/"); 
+    }
+    else if (event.key === "Backspace" || event.key === "Delete") {
+        del(); 
+    }
+    else if (event.key === ".") {
+        appendNumber("."); 
+    }
+    else if (event.key === "Enter" || event.key === "Return") {
+        evaluate(); 
+    }
+});
