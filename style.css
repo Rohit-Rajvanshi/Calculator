@@ -48,7 +48,7 @@ body {
     display: flex;
     justify-content: flex-end;
     align-items: flex-end;
-    font-family: "Bebas Neue", "sans-serif";
+    font-family: "Bebas Neue";
     font-size: 40px;
     font-weight:bolder;
     flex-direction: column;
