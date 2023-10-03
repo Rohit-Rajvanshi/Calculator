@@ -123,7 +123,9 @@ function compute(op){
         break;
         case"/":
         if(currentOperation.textContent==="0"){
-         currentOperation.textContent="division by 0 = impossible"
+         
+         alert("Naughty hora bkl")
+         throw Error;
          }
          else{
          value=Number(firstOperand)/Number(secondOperand);}
