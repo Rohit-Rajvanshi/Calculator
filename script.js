@@ -33,6 +33,10 @@ equalTo.addEventListener("click",()=>{
 function appendNumber(number){
     
     currentOperation.textContent +=number;
+    if(currentOperation.textContent.length>=19){
+    currentOperation.textContent="Max Limit:19 Digits"
+
+    }
 }
 
 delButton.addEventListener("click",()=>{
@@ -51,20 +55,31 @@ function appendOperator(operator){
     currentOperation.textContent=" "
 }
 function evaluate(){
+    if(!previousOperation.textContent.trim()){
+        currentOperation.textContent="Error"
+        return;
+    }
+    
     secondOperand=currentOperation.textContent
     previousOperation.textContent=`${firstOperand} ${currentOperator} ${secondOperand} ${"="}`
+    
     switch(currentOperator){
        case"+":
-       currentOperation.textContent=Number(firstOperand)+Number(currentOperation.textContent);
+        currentOperation.textContent=Number(firstOperand)+Number(secondOperand);
        break;
        case"-":
-       currentOperation.textContent=Number(firstOperand)-Number(currentOperation.textContent);
+        currentOperation.textContent=Number(firstOperand)-Number(secondOperand);
        break;
        case"*":
-       currentOperation.textContent=Number(firstOperand)*Number(currentOperation.textContent);
+       currentOperation.textContent=Number(firstOperand)*Number(secondOperand);
        break;
        case"/":
-       currentOperation.textContent=Number(firstOperand)/Number(currentOperation.textContent);
+       if(secondOperand=="0"){
+        currentOperation.textContent="You cannot divide a number by 0"
+        return;
+    }
+        else{
+        currentOperation.textContent=Number(firstOperand)/Number(secondOperand);}
        break;
     }
     
@@ -82,3 +97,5 @@ function reset(){
     currentOperator=null
 }
 
+
+  
